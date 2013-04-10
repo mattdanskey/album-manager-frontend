@@ -71,10 +71,10 @@ module.exports = View.extend({
     },
     
     populateSongs: function(event){
-        songAlbumId =  $(event.target).data('album-id');
-        songsCollection = new SongsCollection({albumId: songAlbumId});
+        songsAlbumId =  $(event.target).data('album-id');
+        songsCollection = new SongsCollection({albumId: songsAlbumId});
         songsCollection.fetch({success: function(){
-            songsView = new SongsView({collection: songsCollection})
+            songsView = new SongsView({collection: songsCollection, albumId: songsAlbumId})
             songsView.render();
         }});
     }
