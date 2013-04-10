@@ -1,5 +1,7 @@
 var View     = require('./view')
   , albumTemplate = require('./templates/album')
+  , SongsView = require('./songs')
+  , SongsCollection = require('../models/songs')
 
 
 module.exports = View.extend({
@@ -26,11 +28,11 @@ module.exports = View.extend({
                 id: album.get('id')
             }));
         });
-        this.afterRender();
+        this.myEvents();
 
     },    
     
-    afterRender: function(){
+    myEvents: function(){
         var that = this;
         //sorting
         $('#title-header').off().on('click', function(){
@@ -47,6 +49,11 @@ module.exports = View.extend({
         $('.delete-album').off().on('click', function(event){
             that.removeAlbum(event);
         });
+        
+        //song list population
+        $('.album-title').off().on('click', function(event){
+            that.populateSongs(event);
+        });
     },
     
     reSort: function(column){
@@ -61,6 +68,14 @@ module.exports = View.extend({
         delAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
         delAlbum.destroy();
         this.render();
-    }
+    },
     
+    populateSongs: function(event){
+        songAlbumId =  $(event.target).data('album-id');
+        songsCollection = new SongsCollection({albumId: songAlbumId});
+        songsCollection.fetch({success: function(){
+            songsView = new SongsView({collection: songsCollection})
+            songsView.render();
+        }});
+    }
 });
