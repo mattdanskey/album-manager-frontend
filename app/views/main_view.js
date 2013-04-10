@@ -29,27 +29,6 @@ module.exports = View.extend({
             that.albumsCollectionView = new AlbumsCollectionView({collection: that.albumsCollection});
             that.albumsCollectionView.render();
         }});
-        
-        this.myEvents();
-
-    },
-    
-    myEvents: function() {
-        //These belong in the events hash, but I haven't gotten them firing there yet.
-        var that = this;
-        $('.add-album').off().on('click', function(){
-            that.addAlbum();
-        });    
-    },
-    
-    
-    addAlbum: function(){
-        this.albumsCollection.create({
-            title: $('.input-title').val(),
-            artist: $('.input-artist').val(),
-            genre: $('.input-genre').val()
-        });
-        this.albumsCollectionView.render();        
     }
     
 });

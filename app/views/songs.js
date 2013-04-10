@@ -44,9 +44,11 @@ module.exports = View.extend({
             track: $('.input-song-track').val(),
             title: $('.input-song-title').val(),
             album_id: that.albumId
-        });
-        console.log('hm');
-        this.render();
+        },
+        {success: function(){
+            that.render();
+        }});
+
     }
 
 });

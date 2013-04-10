@@ -45,10 +45,13 @@ module.exports = View.extend({
             that.reSort('genre');
         });
         
-        //album removal
+        //album events
         $('.delete-album').off().on('click', function(event){
             that.removeAlbum(event);
         });
+        $('.add-album').off().on('click', function(){
+            that.addAlbum();
+        });   
         
         //song list population
         $('.album-title').off().on('click', function(event){
@@ -62,6 +65,19 @@ module.exports = View.extend({
         }
         this.collection.sort();
         this.render();
+    },
+    
+    
+    addAlbum: function(){
+        var that = this;
+        this.collection.create({
+            title: $('.input-title').val(),
+            artist: $('.input-artist').val(),
+            genre: $('.input-genre').val()
+        },
+        {success: function(){
+            that.render();
+        }});
     },
     
     removeAlbum: function(event){
