@@ -4,6 +4,7 @@ var BaseCollection = require('./collection')
 module.exports = BaseCollection.extend({
 
     model: Album,
-    url: 'http://localhost:3000/albums'
-
+    url: 'http://localhost:3000/albums',
+    urlRoot: 'http://localhost:3000/albums'
+    
 })

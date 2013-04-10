@@ -4,5 +4,5 @@ module.exports = BaseModel.extend({
     id: undefined,
     artist: undefined,
     title: undefined,
-    genre: undefined
+    genre: undefined,
 })

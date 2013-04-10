@@ -9,7 +9,7 @@ module.exports = View.extend({
     },
     
     events: {
-        //TODO: Investigate what causes these events to not bind
+        //TODO: Investigate the issue with the events hash
         //"click #title-header": "reSort('title')",
         //"click #artist-header": "reSort('artist')",
         //"click #genre-header": "reSort('genre')"
@@ -32,6 +32,7 @@ module.exports = View.extend({
     
     afterRender: function(){
         var that = this;
+        //sorting
         $('#title-header').off().on('click', function(){
             that.reSort('title');
         });
@@ -40,6 +41,11 @@ module.exports = View.extend({
         });
         $('#genre-header').off().on('click', function(){
             that.reSort('genre');
+        });
+        
+        //album removal
+        $('.delete-album').off().on('click', function(event){
+            that.removeAlbum(event);
         });
     },
     
@@ -50,5 +56,11 @@ module.exports = View.extend({
         this.collection.sort();
         this.render();
     },
+    
+    removeAlbum: function(event){
+        delAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        delAlbum.destroy();
+        this.render();
+    }
     
 });
