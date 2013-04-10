@@ -2,23 +2,17 @@ var View     = require('./view')
   , template = require('./templates/main')
   , AlbumsCollectionView = require('./albums')
   , AlbumsCollection = require('../models/albums')
+  , AlbumModel = require('../models/album')
 
 module.exports = View.extend({
-    el: $('body'),
+    el: 'body',
     template: template,
-    
-    events: {
-        "click #album-header": "reSort('title')",
-        "click #artist-header": "reSort('artist')",
-        "click #genre-header": "reSort('genre')"
-    },
     
     initialize: function(){
         this.albumsCollection = new AlbumsCollection();
         this.constructor.__super__.initialize.apply(this);
         // The above line in coffeescript? simply:
         // super
-        console.log('?');
 
     },
     
@@ -35,17 +29,22 @@ module.exports = View.extend({
             that.albumsCollectionView = new AlbumsCollectionView({collection: that.albumsCollection});
             that.albumsCollectionView.render();
         }});
-        $('#album-header').on('click', function(event){
-            console.log('hi');
+        
+        //These belong in the events hash, but I haven't gotten them firing there yet.
+        $('.add-album').off().on('click', function(){
+            that.addAlbum();
         });
     },
     
-    reSort: function(column){
-        console.log('doing something?');
-        this.albumsCollection.sortBy(function(album){
-            return album.get(column);
+    
+    addAlbum: function(){
+        var that = this;
+        this.albumsCollection.create({
+            title: $('.input-title').val(),
+            artist: $('.input-artist').val(),
+            genre: $('.input-genre').val()
         });
-        this.albumsCollectionView.render();
+        that.albumsCollectionView.render();        
     }
     
 });

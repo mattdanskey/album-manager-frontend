@@ -8,7 +8,6 @@ module.exports = Backbone.Router.extend({
     
     home: function() {
         $('body').html(application.homeView.render().el);
-        console.log('eh?');
     },
     
     albums: function() {
