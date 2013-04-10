@@ -1,5 +1,5 @@
 var View     = require('./view')
-  , albumTemplate = require('./templates/album')
+  , AlbumView = require('./album')
   , SongsView = require('./songs')
   , SongsCollection = require('../models/songs')
 
@@ -20,13 +20,8 @@ module.exports = View.extend({
         $('#album-list').empty();
         this.collection.each(function(album){
             //$('#album-list').append(album.get('title'));
-            $('#album-list').append(albumTemplate({
-                //TODO: Look into passing in the model instead
-                title: album.get('title'),
-                artist: album.get('artist'),
-                genre: album.get('genre'),
-                id: album.get('id')
-            }));
+            alView = new AlbumView({model: album});
+            alView.render();
         });
         this.myEvents();
 
@@ -51,7 +46,13 @@ module.exports = View.extend({
         });
         $('.add-album').off().on('click', function(){
             that.addAlbum();
-        });   
+        });
+        $('.edit-album').off().on('click', function(event){
+            that.editAlbum(event);
+        });
+        $('.save-edit').off().on('click', function(event){
+            that.saveEdit(event);
+        });
         
         //song list population
         $('.album-title').off().on('click', function(event){
@@ -84,6 +85,30 @@ module.exports = View.extend({
         delAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
         delAlbum.destroy();
         this.render();
+    },
+    
+    editAlbum: function(event){
+        editedAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        $('.edit-title').val(editedAlbum.get('title'));
+        $('.edit-artist').val(editedAlbum.get('artist'));
+        $('.edit-genre').val(editedAlbum.get('genre'));
+        $('.save-edit').data('album-id', editedAlbum.get('id'));
+        $('.update-album').modal('show');
+        //this.render();
+    },
+    
+    saveEdit: function(){
+        var that = this;
+        editedAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        editedAlbum.save({
+            title: $('.edit-title').val(),
+            artist: $('.edit-artist').val(),
+            genre: $('.edit-genre').val()
+        },
+        {success: function(){
+            that.render();
+        }});
+        $('.update-album').modal('hide');
     },
     
     populateSongs: function(event){

@@ -5,11 +5,14 @@
     <div class='span4'>
         {{artist}}
     </div>
-    <div class='span3'>
+    <div class='span2'>
         {{genre}}
     </div>
-    <div class='span1 btn btn-small delete-album' data-album-id="{{id}}">
-    x
+    <div class='span1 edit-album muted' data-album-id="{{id}}">
+        edit
+    </div>
+    <div class='span1 delete-album'>
+        <a href='javascript:void(0)' data-album-id='{{id}}'>&times;</a>
     </div>
     
     
