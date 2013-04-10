@@ -13,7 +13,8 @@ module.exports = View.extend({
         this.collection.each(function(song){
             $('#song-list').append(SongTemplate({
                 track: song.get('track'),
-                title: song.get('title')
+                title: song.get('title'),
+                id: song.get('id')
             }));
         });
         this.myEvents();
@@ -24,6 +25,15 @@ module.exports = View.extend({
         $('.add-song').off().on('click', function(){
             that.addSong();
         });
+        $('.delete-song').off().on('click', function(event){
+            that.removeSong(event);
+        });
+    },
+    
+    removeSong: function(event){
+        delSong = this.collection.where({id: $(event.target).data('song-id')})[0];
+        delSong.destroy();
+        this.render();
     },
     
     addSong: function(){
