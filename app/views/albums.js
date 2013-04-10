@@ -57,6 +57,7 @@ module.exports = View.extend({
         //song list population
         $('.album-title').off().on('click', function(event){
             that.populateSongs(event);
+            that.populateAlbumInfo(event);
         });
     },
     
@@ -82,13 +83,13 @@ module.exports = View.extend({
     },
     
     removeAlbum: function(event){
-        delAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        var delAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
         delAlbum.destroy();
         this.render();
     },
     
     editAlbum: function(event){
-        editedAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        var editedAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
         $('.edit-title').val(editedAlbum.get('title'));
         $('.edit-artist').val(editedAlbum.get('artist'));
         $('.edit-genre').val(editedAlbum.get('genre'));
@@ -99,7 +100,7 @@ module.exports = View.extend({
     
     saveEdit: function(){
         var that = this;
-        editedAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        var editedAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
         editedAlbum.save({
             title: $('.edit-title').val(),
             artist: $('.edit-artist').val(),
@@ -112,11 +113,18 @@ module.exports = View.extend({
     },
     
     populateSongs: function(event){
-        songsAlbumId =  $(event.target).data('album-id');
-        songsCollection = new SongsCollection({albumId: songsAlbumId});
+        var songsAlbumId =  $(event.target).data('album-id');
+        var songsCollection = new SongsCollection({albumId: songsAlbumId});
         songsCollection.fetch({success: function(){
             songsView = new SongsView({collection: songsCollection, albumId: songsAlbumId})
             songsView.render();
         }});
+    },
+    
+    populateAlbumInfo: function(event){
+        var activeAlbum = this.collection.where({id: $(event.target).data('album-id')})[0];
+        $('#display-album').html(activeAlbum.get('title'));
+        $('#display-artist').html(activeAlbum.get('artist'));
+        $('#display-genre').html(activeAlbum.get('genre'));
     }
 });
